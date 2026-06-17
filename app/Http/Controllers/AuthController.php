@@ -19,9 +19,9 @@ class AuthController extends Controller
 
         $user = User::create($validated);
 
-        Auth::login($user);
+        $token = $user->createToken('user-token')->plainTextToken;
 
-        return response()->json(['message' => 'User registered successfully', 'data' => ['user' => $user]], 201);
+        return response()->json(['message' => 'User registered successfully', 'data' => ['user' => $user, 'token' => $token]], 201);
     }
 
     public function login(Request $request)
@@ -39,15 +39,14 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        $request->session()->regenerate();
+        $token = $user->createToken('user-token')->plainTextToken;
 
-        return response()->json(['message' => 'Login successful', 'data' => ['user' => $user]], 200);
+        return response()->json(['message' => 'Login successful', 'data' => ['user' => $user, 'token' => $token]], 200);
     }
 
     public function logout(Request $request)
     {
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        $request->user()->currentAccessToken()->delete();
 
         return response()->json(['message' => 'Logged out successfully'], 200);
     }

@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['http://localhost:3000', 'http://expense-tracker.test'],
+    'allowed_origins' => ['*'],
 
     'allowed_origins_patterns' => [],
 
